@@ -46,16 +46,6 @@ def get_current_datetime() -> datetime:
 """
 Perception Module for Agent Context and Goal Management
 Handles context synthesis and goal updates based on events and current state.
-
-HOLLOWAY TEST ENHANCEMENTS:
-- Enhanced memory retrieval with detailed parameter logging
-- Comprehensive reflection generation using values, goals, and history
-- Detailed action execution logging showing all decision factors
-- Never shortens text output for holloway test mode
-- Shows all memory scoring parameters, cutoff values, and math
-- Ensures cosine similarity is used for vector comparisons
-- Passes recent history, values, and goals to reflection
-- Encourages deeper agent reflection and introspection
 """
 
 from typing import List, Dict, Any, Optional
