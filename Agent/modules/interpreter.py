@@ -2,12 +2,6 @@
 """
 Interpreter for typed actions.
 
-- dry_run: validate schema/permissions/preconditions, return estimate
-- commit: revalidate, apply effects to produce domain events, atomically:
-  * append events to event bus
-  * map events to accounting journal lines (placeholder hook)
-  * write action record to action ledger
-
 All world mutations must occur via reducers that consume emitted events.
 """
 
