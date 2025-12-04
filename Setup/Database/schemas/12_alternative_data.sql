@@ -1,3 +1,5 @@
+-- world sim alternative data database schema
+
 -- tables for alternative data that we might use in either setting up the 
 -- simulation that we are going to run or for the heuristics of the agents
 

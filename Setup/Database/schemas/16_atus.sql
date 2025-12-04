@@ -1,4 +1,4 @@
--- ATUS (American Time Use Survey) Database Schema
+-- world sim atus database schema
 -- Properly normalized with correct primary/foreign keys based on actual data structure
 
 DROP DATABASE IF EXISTS world_sim_atus;
@@ -17,9 +17,7 @@ DROP TABLE IF EXISTS world_sim_atus.atuscase;
 DROP TABLE IF EXISTS world_sim_atus.case_id;
 DROP TABLE IF EXISTS world_sim_atus.mapping_codes;
 
--- =============================================================================
--- MAPPING_CODES: Activity code mappings (lexicon)
--- =============================================================================
+-- mapping codes table
 CREATE TABLE IF NOT EXISTS world_sim_atus.mapping_codes (
     major_code VARCHAR(2) NOT NULL,
     major_name VARCHAR(255) NOT NULL,
@@ -34,10 +32,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.mapping_codes (
     INDEX idx_activity (activity)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- CASE_ID: Central table with demographics from atussum (one row per respondent)
--- Primary Key: TUCASEID (unique respondent identifier)
--- =============================================================================
+-- case id table
 CREATE TABLE IF NOT EXISTS world_sim_atus.case_id (
     TUCASEID VARCHAR(14) NOT NULL,
     -- Demographics from atussum
@@ -71,11 +66,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.case_id (
     INDEX idx_sex (TESEX)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- ATUSCASE: Interview metadata (from atuscase_0524.dat)
--- Primary Key: TUCASEID (unique - one interview record per respondent)
--- Foreign Key: TUCASEID -> case_id
--- =============================================================================
+-- atuscase table
 CREATE TABLE IF NOT EXISTS world_sim_atus.atuscase (
     TUCASEID VARCHAR(14) NOT NULL,
     TR1INTST INTEGER,                -- Interview status 1
@@ -102,11 +93,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.atuscase (
     INDEX idx_total_activities (TUTOTACTNO)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- CPS: Current Population Survey data (from atuscps_0324.dat)
--- Primary Key: (TUCASEID, TULINENO) - one row per household member
--- Foreign Key: TUCASEID -> case_id
--- =============================================================================
+-- cps table
 CREATE TABLE IF NOT EXISTS world_sim_atus.cps (
     TUCASEID VARCHAR(14) NOT NULL,
     TULINENO INTEGER NOT NULL,      -- Person line number in household
@@ -217,11 +204,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.cps (
     INDEX idx_year (HRYEAR4)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- RESP: Respondent-level data (from atusresp_0324.dat)
--- Primary Key: (TUCASEID, TULINENO) - one row per household member
--- Foreign Key: TUCASEID -> case_id
--- =============================================================================
+-- resp table
 CREATE TABLE IF NOT EXISTS world_sim_atus.resp (
     TUCASEID VARCHAR(14) NOT NULL,
     TULINENO INTEGER NOT NULL,
@@ -282,11 +265,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.resp (
     INDEX idx_year (TUYEAR)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- ROST: Household roster (from atusrost_0324.dat)
--- Primary Key: (TUCASEID, TULINENO) - one row per household member
--- Foreign Key: TUCASEID -> case_id
--- =============================================================================
+-- rost table
 CREATE TABLE IF NOT EXISTS world_sim_atus.rost (
     TUCASEID VARCHAR(14) NOT NULL,
     TULINENO INTEGER NOT NULL,      -- Person line number
@@ -300,12 +279,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.rost (
     INDEX idx_sex (TESEX)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- ROSTEC: Elder care roster (from atusrostec_1124.dat)
--- Primary Key: (TUCASEID, TUECLNO, TULINENO)
--- Foreign Key: TUCASEID -> case_id
--- Note: TULINENO can be -1 (non-household elder care recipient)
--- =============================================================================
+-- rostec table
 CREATE TABLE IF NOT EXISTS world_sim_atus.rostec (
     TUCASEID VARCHAR(14) NOT NULL,
     TUECLNO INTEGER NOT NULL,       -- Elder care person number
@@ -322,11 +296,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.rostec (
     INDEX idx_tulineno (TULINENO)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- ATUSACT: Activity data (from atusact_0324.dat)
--- Primary Key: (TUCASEID, TUACTIVITY_N) - one row per activity
--- Foreign Key: TUCASEID -> case_id
--- =============================================================================
+-- atusact table
 CREATE TABLE IF NOT EXISTS world_sim_atus.atusact (
     TUCASEID VARCHAR(14) NOT NULL,
     TUACTIVITY_N INTEGER NOT NULL,  -- Activity sequence number (1, 2, 3, ...)
@@ -365,11 +335,9 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.atusact (
     INDEX idx_where (TEWHERE)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- WHO: "Who was with you" data (from atuswho_0324.dat)
--- Primary Key: (TUCASEID, TULINENO, TUACTIVITY_N, TUWHO_CODE)
--- Foreign Keys: TUCASEID -> case_id, (TUCASEID, TUACTIVITY_N) -> atusact
--- =============================================================================
+
+
+-- who table
 CREATE TABLE IF NOT EXISTS world_sim_atus.who (
     TUCASEID VARCHAR(14) NOT NULL,
     TULINENO INTEGER NOT NULL,      -- Person line number (or -1)
@@ -384,12 +352,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.who (
     INDEX idx_alone (TRWHONA)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- WEIGHTS: Replicate weights (from atuswgts_0324.dat)
--- Wide format with one row per case and 160 weight columns.
--- Primary Key: TUCASEID
--- Foreign Key: TUCASEID -> case_id
--- =============================================================================
+-- weights table
 CREATE TABLE IF NOT EXISTS world_sim_atus.weights (
     TUCASEID VARCHAR(14) NOT NULL,
     TUFNWGTP001 DOUBLE, TUFNWGTP002 DOUBLE, TUFNWGTP003 DOUBLE, TUFNWGTP004 DOUBLE,
@@ -436,12 +399,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.weights (
     FOREIGN KEY (TUCASEID) REFERENCES world_sim_atus.case_id (TUCASEID) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- SUM: Time spent in activities (from atussum_0324.dat)
--- Normalized from wide format (t010101..t509989) to long format
--- Primary Key: (TUCASEID, activity_code)
--- Foreign Keys: TUCASEID -> case_id, activity_code -> mapping_codes
--- =============================================================================
+-- sum table
 CREATE TABLE IF NOT EXISTS world_sim_atus.sum (
     TUCASEID VARCHAR(14) NOT NULL,
     activity_code VARCHAR(6) NOT NULL,
@@ -457,12 +415,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.sum (
 
 
 
--- =============================================================================
--- STRATA_DEF: Stratification definitions for agent behavior modeling
--- Primary Key: id (auto-increment)
--- Foreign Keys: None (root table for stratification)
--- Note: Stores JSON definitions of demographic/behavioral strata used for activity pattern analysis
--- =============================================================================
+-- strata def table
 CREATE TABLE IF NOT EXISTS world_sim_atus.strata_def (
     id INT UNSIGNED NOT NULL AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
@@ -472,12 +425,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.strata_def (
     INDEX idx_name (name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- CASE_STRATUM: Maps ATUS cases to their behavioral strata
--- Primary Key: TUCASEID (one-to-one with case_id)
--- Foreign Keys: TUCASEID -> case_id, stratum_id -> strata_def
--- Note: Links respondents to their stratification classification for pattern analysis
--- =============================================================================
+-- case stratum table
 CREATE TABLE IF NOT EXISTS world_sim_atus.case_stratum (
     TUCASEID VARCHAR(14) NOT NULL,
     stratum_id INT UNSIGNED NOT NULL,
@@ -487,12 +435,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.case_stratum (
     INDEX idx_stratum (stratum_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- OPERATOR_MAP: Maps ATUS activity codes to simulation operator groups
--- Primary Key: six_digit_activity_code
--- Foreign Keys: six_digit_activity_code -> mapping_codes
--- Note: Defines how real-world activities translate to agent behaviors, including default locations, durations, and quotas
--- =============================================================================
+-- operator map table
 CREATE TABLE IF NOT EXISTS world_sim_atus.operator_map (
     six_digit_activity_code VARCHAR(6) NOT NULL,
     operator_group VARCHAR(50) NOT NULL,
@@ -506,12 +449,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.operator_map (
     INDEX idx_operator_group (operator_group)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- HOURLY_MIX: Probability distribution of operator groups by hour and day of week
--- Primary Key: (stratum_id, dow, hour, operator_group)
--- Foreign Keys: stratum_id -> strata_def
--- Note: Stores time-of-day and day-of-week activity patterns for each demographic stratum
--- =============================================================================
+-- hourly mix table
 CREATE TABLE IF NOT EXISTS world_sim_atus.hourly_mix (
     stratum_id INT UNSIGNED NOT NULL,
     dow TINYINT UNSIGNED NOT NULL,
@@ -525,12 +463,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.hourly_mix (
     INDEX idx_operator (operator_group)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- DURATION_STATS: Statistical summary of activity durations by stratum, day, and operator
--- Primary Key: (stratum_id, dow, operator_group)
--- Foreign Keys: stratum_id -> strata_def
--- Note: Stores mean, standard deviation, and percentiles (p10, p50, p90) for activity duration modeling
--- =============================================================================
+-- duration stats table
 CREATE TABLE IF NOT EXISTS world_sim_atus.duration_stats (
     stratum_id INT UNSIGNED NOT NULL,
     dow TINYINT UNSIGNED NOT NULL,
@@ -547,12 +480,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.duration_stats (
     INDEX idx_operator (operator_group)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- TRANSITIONS: Probability of transitioning between operator groups by hour
--- Primary Key: (stratum_id, hour, from_operator, to_operator)
--- Foreign Keys: stratum_id -> strata_def
--- Note: Models state transitions in agent behavior sequences (e.g., work -> commute -> home)
--- =============================================================================
+-- transitions table
 CREATE TABLE IF NOT EXISTS world_sim_atus.transitions (
     stratum_id INT UNSIGNED NOT NULL,
     hour TINYINT UNSIGNED NOT NULL,
@@ -565,12 +493,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.transitions (
     INDEX idx_from_to (from_operator, to_operator)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- SOCIAL_WHERE: Social context probabilities for activities by hour
--- Primary Key: (stratum_id, hour, operator_group)
--- Foreign Keys: stratum_id -> strata_def
--- Note: Stores probabilities of activities occurring at home vs. out, alone vs. with spouse/children/friends
--- =============================================================================
+-- social where table
 CREATE TABLE IF NOT EXISTS world_sim_atus.social_where (
     stratum_id INT UNSIGNED NOT NULL,
     hour TINYINT UNSIGNED NOT NULL,
@@ -587,12 +510,7 @@ CREATE TABLE IF NOT EXISTS world_sim_atus.social_where (
     INDEX idx_operator (operator_group)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- =============================================================================
--- WEEKLY_PRESENCE: Weekly frequency and total time for operator groups by stratum
--- Primary Key: (stratum_id, operator_group)
--- Foreign Keys: stratum_id -> strata_def
--- Note: Aggregates weekly activity patterns: presence rate (how often) and mean minutes per week
--- =============================================================================
+-- weekly presence table
 CREATE TABLE IF NOT EXISTS world_sim_atus.weekly_presence (
     stratum_id INT UNSIGNED NOT NULL,
     operator_group VARCHAR(50) NOT NULL,

@@ -1,23 +1,22 @@
--- Conversations and Channels Tables
--- For agent communication and channel management
+-- world sim conversations and channels database schema
 
-USE world_sim_simulations;
+-- drop and create the database
+DROP DATABASE IF EXISTS world_sim_conversations;
+CREATE DATABASE world_sim_conversations CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
--- =============================================================================
--- CONVERSATION TABLES
--- =============================================================================
+-- conversation tables
 
 DROP TABLE IF EXISTS conversation_commitments;
-DROP TABLE IF EXISTS conversation_turns;
-DROP TABLE IF EXISTS conversations;
-DROP TABLE IF EXISTS channels;
-DROP TABLE IF EXISTS channel_usage;
-DROP TABLE IF EXISTS knowledge_entities;
-DROP TABLE IF EXISTS knowledge_roles;
-DROP TABLE IF EXISTS opinions_people;
-DROP TABLE IF EXISTS opinions_places;
+DROP TABLE IF EXISTS world_sim_conversations.conversation_turns;
+DROP TABLE IF EXISTS world_sim_conversations.conversations;
+DROP TABLE IF EXISTS world_sim_conversations.channels;
+DROP TABLE IF EXISTS world_sim_conversations.channel_usage;
+DROP TABLE IF EXISTS world_sim_conversations.knowledge_entities;
+DROP TABLE IF EXISTS world_sim_conversations.knowledge_roles;
+DROP TABLE IF EXISTS world_sim_conversations.opinions_people;
+DROP TABLE IF EXISTS world_sim_conversations.opinions_places;
 
-CREATE TABLE conversations (
+CREATE TABLE world_sim_conversations.conversations (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     simulation_id VARCHAR(64) NOT NULL,
     conversation_id VARCHAR(255) NOT NULL,
@@ -41,7 +40,7 @@ CREATE TABLE conversations (
     FOREIGN KEY (simulation_id) REFERENCES simulations(simulation_id) ON DELETE CASCADE
 );
 
-CREATE TABLE conversation_turns (
+CREATE TABLE world_sim_conversations.conversation_turns (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     conversation_id VARCHAR(255) NOT NULL,
     turn_number INT NOT NULL,
@@ -56,7 +55,7 @@ CREATE TABLE conversation_turns (
     FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE
 );
 
-CREATE TABLE conversation_commitments (
+CREATE TABLE world_sim_conversations.conversation_commitments (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     conversation_id VARCHAR(255) NOT NULL,
     agent_id VARCHAR(255) NOT NULL,
@@ -70,11 +69,12 @@ CREATE TABLE conversation_commitments (
     FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE
 );
 
--- =============================================================================
--- CHANNEL TABLES
--- =============================================================================
 
-CREATE TABLE channels (
+
+
+---- channel tables
+
+CREATE TABLE world_sim_conversations.channels (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     simulation_id VARCHAR(64) NOT NULL,
     channel_id VARCHAR(255) NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE channels (
     FOREIGN KEY (simulation_id) REFERENCES simulations(simulation_id) ON DELETE CASCADE
 );
 
-CREATE TABLE channel_usage (
+CREATE TABLE world_sim_conversations.channel_usage (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     simulation_id VARCHAR(64) NOT NULL,
     channel_id VARCHAR(255) NOT NULL,
@@ -116,14 +116,12 @@ CREATE TABLE channel_usage (
     FOREIGN KEY (channel_id) REFERENCES channels(channel_id) ON DELETE CASCADE
 );
 
--- =============================================================================
--- INNOVATION TABLES
--- =============================================================================
+-- innovation tables
 
-DROP TABLE IF EXISTS innovation_ideas;
-DROP TABLE IF EXISTS innovation_prototypes;
+DROP TABLE IF EXISTS world_sim_conversations.innovation_ideas;
+DROP TABLE IF EXISTS world_sim_conversations.innovation_prototypes;
 
-CREATE TABLE innovation_ideas (
+CREATE TABLE world_sim_conversations.innovation_ideas (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     simulation_id VARCHAR(64) NOT NULL,
     idea_id VARCHAR(255) NOT NULL,
@@ -142,7 +140,7 @@ CREATE TABLE innovation_ideas (
     FOREIGN KEY (simulation_id) REFERENCES simulations(simulation_id) ON DELETE CASCADE
 );
 
-CREATE TABLE innovation_prototypes (
+CREATE TABLE world_sim_conversations.innovation_prototypes (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     idea_id VARCHAR(255) NOT NULL,
     prototype_id VARCHAR(255) NOT NULL,
@@ -160,11 +158,11 @@ CREATE TABLE innovation_prototypes (
     FOREIGN KEY (idea_id) REFERENCES innovation_ideas(idea_id) ON DELETE CASCADE
 );
 
--- =============================================================================
--- KNOWLEDGE & OPINIONS TABLES
--- =============================================================================
 
-CREATE TABLE knowledge_entities (
+
+-- tables for the knowledge and opinions of the agents
+
+CREATE TABLE world_sim_conversations.knowledge_entities (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     simulation_id VARCHAR(64) NOT NULL,
     agent_id VARCHAR(255) NOT NULL,
@@ -182,7 +180,7 @@ CREATE TABLE knowledge_entities (
     FOREIGN KEY (simulation_id) REFERENCES simulations(simulation_id) ON DELETE CASCADE
 );
 
-CREATE TABLE knowledge_roles (
+CREATE TABLE world_sim_conversations.knowledge_roles (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     simulation_id VARCHAR(64) NOT NULL,
     agent_id VARCHAR(255) NOT NULL,
@@ -197,7 +195,7 @@ CREATE TABLE knowledge_roles (
     FOREIGN KEY (simulation_id) REFERENCES simulations(simulation_id) ON DELETE CASCADE
 );
 
-CREATE TABLE opinions_people (
+CREATE TABLE world_sim_conversations.opinions_people (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     simulation_id VARCHAR(64) NOT NULL,
     agent_id VARCHAR(255) NOT NULL,
@@ -211,7 +209,7 @@ CREATE TABLE opinions_people (
     FOREIGN KEY (simulation_id) REFERENCES simulations(simulation_id) ON DELETE CASCADE
 );
 
-CREATE TABLE opinions_places (
+CREATE TABLE world_sim_conversations.opinions_places (
     id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
     simulation_id VARCHAR(64) NOT NULL,
     agent_id VARCHAR(255) NOT NULL,

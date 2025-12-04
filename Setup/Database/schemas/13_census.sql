@@ -322,11 +322,11 @@ CREATE TABLE IF NOT EXISTS world_sim_census.pums_p (
     PUMA CHAR(8) NOT NULL,
     REGION CHAR(8),
     STATE CHAR(8) NOT NULL,                               -- from STATE/ST
-    ADJINC VARCHAR(8) NOT NULL,                        -- use ADJINC; map ADJUST → ADJINC if needed
+    ADJINC VARCHAR(8) NOT NULL,                        -- use ADJINC; map ADJUST -> ADJINC if needed
 
     -- person weight (canonical)
     PWGTP INT NOT NULL,
-    -- keep only canonical replicate weights PWGTP1–PWGTP80; promote lowercase pwgtp* → uppercase
+    -- keep only canonical replicate weights PWGTP1–PWGTP80
     PWGTP1 INT NOT NULL,  PWGTP2 INT NOT NULL,  PWGTP3 INT NOT NULL,  PWGTP4 INT NOT NULL,  PWGTP5 INT NOT NULL,
     PWGTP6 INT NOT NULL,  PWGTP7 INT NOT NULL,  PWGTP8 INT NOT NULL,  PWGTP9 INT NOT NULL,  PWGTP10 INT NOT NULL,
     PWGTP11 INT NOT NULL, PWGTP12 INT NOT NULL, PWGTP13 INT NOT NULL, PWGTP14 INT NOT NULL, PWGTP15 INT NOT NULL,

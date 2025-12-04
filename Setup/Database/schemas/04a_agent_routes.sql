@@ -1,11 +1,7 @@
 -- Agent Routes and Travel Timeline Tables
 -- These tables enable frontend scrubbing and route visualization
 
--- =============================================================================
--- AGENT_ROUTES: Stores full route geometry and metadata for agent travel
--- Primary Key: route_id (auto-increment)
--- Foreign Keys: simulation_id -> simulations, agent_id -> agents(l2_voter_id)
--- =============================================================================
+-- table for the routes that agents take around the world
 CREATE TABLE IF NOT EXISTS world_sim_simulations.agent_routes (
     route_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     simulation_id VARCHAR(64) NOT NULL,
@@ -50,11 +46,7 @@ CREATE TABLE IF NOT EXISTS world_sim_simulations.agent_routes (
 COMMENT='Stores agent travel routes with full geometry for frontend visualization and scrubbing';
 
 
--- =============================================================================
--- AGENT_LOCATION_TIMELINE: Interpolated agent positions for smooth scrubbing
--- Primary Key: (simulation_id, agent_id, timeline_timestamp)
--- Foreign Keys: simulation_id -> simulations, agent_id -> agents(l2_voter_id)
--- =============================================================================
+-- table for the interpolated agent positions for smooth scrubbing
 CREATE TABLE IF NOT EXISTS world_sim_simulations.agent_location_timeline (
     simulation_id VARCHAR(64) NOT NULL,
     agent_id VARCHAR(64) NOT NULL,
@@ -84,9 +76,7 @@ CREATE TABLE IF NOT EXISTS world_sim_simulations.agent_location_timeline (
 COMMENT='Fine-grained agent positions for smooth frontend scrubbing (1-minute granularity)';
 
 
--- =============================================================================
--- Enhanced ACTION_LEDGER: Add route and location tracking
--- =============================================================================
+-- table for the enhanced action ledger with route and location tracking
 ALTER TABLE world_sim_simulations.action_ledger
 ADD COLUMN IF NOT EXISTS route_id BIGINT UNSIGNED NULL COMMENT 'Link to agent_routes for Travel actions',
 ADD COLUMN IF NOT EXISTS location_at_execution_lat DECIMAL(10,8) NULL,
@@ -98,9 +88,7 @@ ADD INDEX IF NOT EXISTS idx_action_type_time (simulation_id, action_name, timest
 ADD FOREIGN KEY IF NOT EXISTS fk_action_ledger_route (route_id) REFERENCES world_sim_simulations.agent_routes(route_id) ON DELETE SET NULL;
 
 
--- =============================================================================
--- AGENT_ACTION_CONTEXT: Rich action history for LLM context and replay
--- =============================================================================
+-- table for the rich action history for LLM context and replay
 CREATE TABLE IF NOT EXISTS world_sim_simulations.agent_action_context (
     context_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
     simulation_id VARCHAR(64) NOT NULL,
