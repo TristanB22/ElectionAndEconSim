@@ -46,9 +46,7 @@ def analyze_who_keys():
         print(f"(TUCASEID, TULINENO, TUACTIVITY_N, TUWHO_CODE): {len(keys_4col)} unique")
         
         if len(keys_4col) == count:
-            print("✓ PRIMARY KEY: (TUCASEID, TULINENO, TUACTIVITY_N, TUWHO_CODE)")
         elif len(keys_3col_a) == count:
-            print("✓ PRIMARY KEY: (TUCASEID, TUACTIVITY_N, TUWHO_CODE)")
         else:
             print("✗ Need 5-column key including TRWHONA")
 
@@ -91,7 +89,6 @@ def analyze_atuscase_keys():
             for k, v in list(duplicates.items())[:5]:
                 print(f"  {k}: {v} times")
         else:
-            print("✓ TUCASEID is unique - can be PRIMARY KEY")
 
 
 def analyze_atussum_structure():
@@ -130,7 +127,6 @@ def analyze_atussum_structure():
         print(f"\nRows: {count}")
         print(f"Unique TUCASEID: {len(tucaseid_set)}")
         if len(tucaseid_set) == count:
-            print("✓ TUCASEID is unique in sum data")
             print("→ Normalize to: case_id table (demographics) + sum table (TUCASEID, activity_code, minutes)")
 
 
@@ -167,7 +163,6 @@ def analyze_weights_structure():
         print(f"\nRows: {count}")
         print(f"Unique TUCASEID: {len(tucaseid_set)}")
         if len(tucaseid_set) == count:
-            print("✓ TUCASEID is unique")
             print("→ Normalize to: (TUCASEID, weight_number, weight_value)")
 
 

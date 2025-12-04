@@ -699,7 +699,6 @@ Respond with just your final answer in the exact format requested by the questio
         
         # Report summary at all verbosity levels
         if verbosity >= 1:
-            print(f"✓ Inserted {total_inserted}/{total_successful} responses in batches of {INSERT_BATCH_SIZE}")
             if total_failed > 0:
                 print(f"{total_failed} question(s) failed after retries (see details above)")
             elif total_successful > 0:

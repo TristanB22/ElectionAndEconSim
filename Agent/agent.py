@@ -453,11 +453,11 @@ class Agent:
             self._mood_influence = MoodInfluence()
             verbosity = int(os.getenv('VERBOSITY_LEVEL', '1'))
             if verbosity >= 2 and self._mood_state:
-                print(f"✓ Mood State: {self._mood_state.get_mood_summary()}")
+                print(f"Mood State: {self._mood_state.get_mood_summary()}")
                 if self._emotional_momentum:
-                    print(f"✓ Emotional Momentum: {self._emotional_momentum.momentum:.2f} ({self._emotional_momentum.get_stability_description()})")
+                    print(f"Emotional Momentum: {self._emotional_momentum.momentum:.2f} ({self._emotional_momentum.get_stability_description()})")
                 if self._mood_decay:
-                    print(f"✓ Mood Decay: {self._mood_decay.decay_rate:.3f} ({self._mood_decay.get_decay_description()})")
+                    print(f"Mood Decay: {self._mood_decay.decay_rate:.3f} ({self._mood_decay.get_decay_description()})")
             self._mood_initialized = True
         except Exception as e:
             print(f"Warning: Failed to initialize mood system: {e}")

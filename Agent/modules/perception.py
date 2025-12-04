@@ -353,7 +353,7 @@ Your response should look exactly like the example above, with only the content 
                     opportunities=context_data.get('opportunities', [])
                 )
                 
-                print(f"✓ Context synthesized successfully using {model_name}")
+                print(f"Context synthesized successfully using {model_name}")
                 return context
                     
             except json.JSONDecodeError as e:
@@ -428,8 +428,8 @@ Your response should look exactly like the example above, with only the content 
                 constraints=[],
                 opportunities=[]
             )
-            
-            print("✓ Fallback context created from event analysis")
+                
+            print("Fallback context created from event analysis")
             return context
             
         except Exception as e:
@@ -930,7 +930,7 @@ IMPORTANT: Return ONLY the personal reflection, no other text or explanation. Ma
             )
             
             if recent_memories:
-                print(f"✓ Found {len(recent_memories)} recent memories")
+                print(f"Found {len(recent_memories)} recent memories")
                 
                 # Extract memory content and show detailed scoring
                 memory_contents = []

@@ -62,10 +62,6 @@ HOW IT WORKS (Behind the Scenes)
 BACKWARD COMPATIBILITY
 ----------------------
 
-✓ Existing simulations: Not affected (balance sheets optional)
-✓ Existing code: No changes needed (auto-integrated)
-✓ Database schema: No changes (table already existed)
-✓ Performance: Minimal impact (one-time at simulation start)
 
 If you DON'T want balance sheet generation:
   - Call register_simulation() WITHOUT agent_ids parameter
@@ -156,11 +152,6 @@ Run the provided test script:
     python3 Examples/test_household_balance_sheet_generation.py
 
 Expected output:
-  ✓ Creates simulation with 5 agents
-  ✓ Generates 2-5 household balance sheets (agents may share households)
-  ✓ Displays balance sheet details
-  ✓ Verifies idempotency
-  ✓ Shows summary statistics
 
 If test passes, your integration is working correctly!
 

@@ -414,7 +414,6 @@ def handle_metadata(area_file: str = None, item_file: str = None, series_file: s
         
         if success:
             if verbose:
-                print(f"  ✓ Successfully upserted {len(areas):,} areas")
         else:
             print(f"  ✗ Failed to upsert areas: {error_msg}")
             total_errors += 1
@@ -448,7 +447,6 @@ def handle_metadata(area_file: str = None, item_file: str = None, series_file: s
         
         if success:
             if verbose:
-                print(f"  ✓ Successfully upserted {len(items):,} items")
         else:
             print(f"  ✗ Failed to upsert items: {error_msg}")
             total_errors += 1
@@ -480,7 +478,6 @@ def handle_metadata(area_file: str = None, item_file: str = None, series_file: s
         success, error_msg = mgr.upsert_bls_series(series_rows)
         if success:
             if verbose:
-                print(f"  ✓ Successfully upserted {len(series_rows):,} series")
         else:
             print(f"  ✗ Failed to upsert series: {error_msg}")
             total_errors += 1
@@ -492,7 +489,6 @@ def handle_metadata(area_file: str = None, item_file: str = None, series_file: s
         print()
         print("=" * 80)
         if total_errors == 0:
-            print("✓ BLS metadata fetch and insert completed successfully")
         else:
             print(f"✗ Completed with {total_errors} error(s)")
         print("=" * 80)
@@ -603,9 +599,7 @@ def handle_data(verbose: bool = True) -> int:
         print(f"  ✗ Failed to upsert ap_data: {err}")
         return 1
     if verbose:
-        print("  ✓ Successfully upserted data rows")
         print("=" * 80)
-        print("✓ BLS data fetch and insert completed successfully")
         print("=" * 80)
     return 0
 

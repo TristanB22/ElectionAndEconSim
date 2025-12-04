@@ -464,7 +464,6 @@ def main(argv: List[str]) -> int:
             print(f"{y}: {len(miss)} missing columns out of {len(p_total_set)} total")
             print(f"  Missing: {', '.join(miss)}")
         else:
-            print(f"{y}: ✓ Complete (all {len(p_total_set)} columns present)")
 
     print("\n" + "="*80)
     print("=== HOUSEHOLD (PUMS Household) header differences by year ===")
@@ -478,7 +477,6 @@ def main(argv: List[str]) -> int:
             print(f"{y}: {len(miss)} missing columns out of {len(h_total_set)} total")
             print(f"  Missing: {', '.join(miss)}")
         else:
-            print(f"{y}: ✓ Complete (all {len(h_total_set)} columns present)")
 
     # Print example value dicts
     print("\n" + "="*80)

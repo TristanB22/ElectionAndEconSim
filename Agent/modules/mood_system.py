@@ -690,7 +690,6 @@ Your response should look exactly like the example above, with only the numbers 
                     new_mood.event_id = getattr(event, 'event_id', 'unknown')
                     new_mood.update_reason = self._extract_reasoning(response)
                     
-                    print(f"✓ Mood update successful on attempt {attempt + 1}")
                     return new_mood
                 else:
                     # Response is invalid, prepare retry

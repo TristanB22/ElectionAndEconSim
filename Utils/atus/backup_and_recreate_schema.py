@@ -70,7 +70,6 @@ def main():
             try:
                 cursor.execute(stmt)
                 conn.commit()
-                print(f"    [{idx}/{len(statements)}] ✓ {stmt_preview}")
             except Exception as e:
                 print(f"    [{idx}/{len(statements)}] ✗ {stmt_preview}")
                 print(f"      Error: {e}")
@@ -89,7 +88,6 @@ def main():
             """
             cursor.executemany(insert_sql, backup_data)
             conn.commit()
-            print(f"  ✓ Restored {len(backup_data)} rows")
         
         # Step 4: Verify schema
         print("\nStep 4: Verifying schema...")
@@ -106,7 +104,6 @@ def main():
             count = cursor.fetchone()['cnt']
             print(f"    {table}: {count} rows")
         
-        print("\n✓ Schema recreation complete!")
         return 0
         
     except Exception as e:

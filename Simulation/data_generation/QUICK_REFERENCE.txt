@@ -183,16 +183,6 @@ Database:
 
 FEATURES
 --------
-✓ Household-level modeling
-✓ Idempotent operations
-✓ Deterministic sampling
-✓ HPI integration
-✓ Net worth constraints
-✓ Vehicle depreciation tracking
-✓ Graceful error handling
-✓ Comprehensive logging
-✓ Auto-integrated
-✓ Backward compatible
 
 
 ================================================================================

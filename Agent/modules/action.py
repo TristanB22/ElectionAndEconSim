@@ -362,7 +362,6 @@ REASONING: I've experienced this type of event many times before with only sligh
                         analysis_type = parse_result['analysis_type']
                         impact_score = parse_result['impact_score']
                         reasoning = parse_result['reasoning']
-                        print(f"✓ Perception response parsed successfully on attempt {attempt + 1}")
                         break  # Exit the retry loop on success
                     else:
                         # If validation fails, record the error and prepare for a retry.

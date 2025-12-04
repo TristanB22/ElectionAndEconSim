@@ -161,7 +161,6 @@ def load_case_id_from_atussum(zip_bytes: bytes, verbose: bool = False) -> int:
         pbar.close()
     
     if verbose:
-        print(f"    ✓ Inserted {total_inserted} case_id rows")
     return total_inserted
 
 
@@ -211,7 +210,6 @@ def load_sum_from_atussum(zip_bytes: bytes, verbose: bool = False) -> int:
         pbar.close()
     
     if verbose:
-        print(f"    ✓ Inserted {total_inserted} sum rows")
     return total_inserted
 
 
@@ -258,7 +256,6 @@ def load_weights(zip_bytes: bytes, verbose: bool = False) -> int:
         pbar.close()
     
     if verbose:
-        print(f"    ✓ Inserted {total_inserted} weight rows")
     return total_inserted
 
 
@@ -303,7 +300,6 @@ def load_atuscase(zip_bytes: bytes, verbose: bool = False) -> int:
         return 0
     
     if verbose:
-        print(f"    ✓ Inserted {len(atuscase_rows)} atuscase rows")
     return len(atuscase_rows)
 
 
@@ -334,7 +330,6 @@ def load_rost(zip_bytes: bytes, verbose: bool = False) -> int:
         return 0
     
     if verbose:
-        print(f"    ✓ Inserted {len(rost_rows)} rost rows")
     return len(rost_rows)
 
 
@@ -376,7 +371,6 @@ def load_rostec(zip_bytes: bytes, verbose: bool = False) -> int:
         return 0
     
     if verbose:
-        print(f"    ✓ Inserted {len(rostec_rows)} rostec rows")
     return len(rostec_rows)
 
 
@@ -431,7 +425,6 @@ def load_atusact(zip_bytes: bytes, verbose: bool = False) -> int:
         print(f"    [ERROR] atusact insert failed: {error}")
         return 0
     if verbose:
-        print(f"    ✓ Inserted {len(atusact_rows)} atusact rows")
     return len(atusact_rows)
 
 
@@ -462,7 +455,6 @@ def load_who(zip_bytes: bytes, verbose: bool = False) -> int:
         print(f"    [ERROR] who insert failed: {error}")
         return 0
     if verbose:
-        print(f"    ✓ Inserted {len(who_rows)} who rows")
     return len(who_rows)
 
 
@@ -569,7 +561,6 @@ def load_cps(zip_bytes: bytes, verbose: bool = False, dat_file: Optional[Path] =
         pbar.close()
     
     if verbose:
-        print(f"    ✓ Inserted {total_inserted} cps rows")
     return total_inserted
 
 
@@ -614,7 +605,6 @@ def load_resp(zip_bytes: bytes, verbose: bool = False) -> int:
         pbar.close()
     
     if verbose:
-        print(f"    ✓ Inserted {total_inserted} resp rows")
     return total_inserted
 
 
@@ -681,7 +671,6 @@ def recreate_atus_database(verbose: bool = False) -> bool:
         conn.close()
         
         if verbose:
-            print("  ✓ Database recreated successfully")
         return True
         
     except Exception as e:
@@ -734,7 +723,6 @@ def main(argv: List[str]) -> int:
                 break
         if not discovered_end_suffix:
             discovered_end_suffix = "24"  # Default to 2024
-        print(f"  ✓ Using local test files (year suffix: {discovered_end_suffix})")
     else:
         # Production mode: discover and download from API (without materializing huge files in memory)
         session = create_http_session()
@@ -756,7 +744,6 @@ def main(argv: List[str]) -> int:
                 with zipfile.ZipFile(BytesIO(zip_bytes)) as zf:
                     if any(zi.filename.lower().endswith('.dat') for zi in zf.infolist()):
                         discovered_end_suffix = end_suffix
-                        print(f"  ✓ Found data ending in 20{end_suffix}")
                         break
             except Exception:
                 continue
@@ -803,7 +790,6 @@ def main(argv: List[str]) -> int:
         if result.returncode != 0:
             print(f"[ERROR] Failed to load mapping_codes: {result.stderr}")
             return 1
-        print("  ✓ mapping_codes loaded successfully")
     
     print(f"\nLoading {len(loaders)} file types...")
     
@@ -907,7 +893,6 @@ def main(argv: List[str]) -> int:
                             globals()['parse_dat_file'] = original_parse
     
     print("\n" + "="*80)
-    print("✓ ATUS data loading complete!")
     print("="*80)
     
     return 0
