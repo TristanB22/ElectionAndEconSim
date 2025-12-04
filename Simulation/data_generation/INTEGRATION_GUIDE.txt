@@ -1,0 +1,258 @@
+================================================================================
+HOUSEHOLD BALANCE SHEET GENERATION - INTEGRATION GUIDE
+================================================================================
+
+QUICK START
+-----------
+
+The household balance sheet generation is now AUTOMATICALLY integrated into
+your simulation initialization flow. No changes needed to existing code!
+
+When you create a simulation with agent_ids, balance sheets are auto-generated:
+
+    from Database.managers import get_simulations_manager
+    
+    sim_mgr = get_simulations_manager()
+    sim_id = sim_mgr.register_simulation(
+        started_by="user",
+        description="My simulation",
+        sim_start=datetime.now(),
+        agent_ids=["agent1", "agent2", ...]  # <-- Triggers balance sheet gen
+    )
+    
+    # Balance sheets are now in household_balance_sheet_samples table!
+
+
+WHAT WAS CHANGED
+----------------
+
+1. New Module Created:
+   - Simulation/data_generation/agent_balance_sheet_generation.py
+   - Contains all sampling logic and database operations
+   - Fully self-contained, uses existing DB managers
+
+2. Integration Point Added:
+   - Database/managers/simulations.py
+   - Method: SimulationsDatabaseManager.bulk_initialize_agents()
+   - Added step 4: Generate initial household balance sheets
+   - Called automatically when agent_ids are provided to register_simulation()
+
+3. New Database Manager Export:
+   - Database/managers/__init__.py
+   - Added AlternativeDataDatabaseManager export
+   - Needed for HPI data retrieval
+
+
+HOW IT WORKS (Behind the Scenes)
+---------------------------------
+
+1. You call register_simulation() with agent_ids
+2. SimulationsDatabaseManager.bulk_initialize_agents() is triggered
+3. Step 1: Ensure agent records exist
+4. Step 2: Register initialized agents
+5. Step 3: Seed starting locations
+6. Step 4: Generate household balance sheets (NEW!)
+   - For each agent_id:
+     a. Resolve household_id from L2 family data
+     b. Check if balance sheet exists (idempotent)
+     c. If not, sample balance sheet using L2 + HPI data
+     d. Insert into household_balance_sheet_samples table
+
+
+BACKWARD COMPATIBILITY
+----------------------
+
+✓ Existing simulations: Not affected (balance sheets optional)
+✓ Existing code: No changes needed (auto-integrated)
+✓ Database schema: No changes (table already existed)
+✓ Performance: Minimal impact (one-time at simulation start)
+
+If you DON'T want balance sheet generation:
+  - Call register_simulation() WITHOUT agent_ids parameter
+  - Then manually call register_initialized_agents() later
+  - Balance sheet generation only happens in bulk_initialize_agents()
+
+
+USING THE DATA IN YOUR SIMULATION
+----------------------------------
+
+Query balance sheets for your simulation:
+
+    query = """
+        SELECT 
+            household_id,
+            primaryHomeValue,
+            mortgageBalance,
+            liquidSavings,
+            netWorth
+        FROM world_sim_simulations.household_balance_sheet_samples
+        WHERE simulation_id = %s
+          AND sim_clock_datetime = %s
+    """
+    
+    result = sim_mgr.execute_query(
+        query, 
+        (sim_id, simulation_start_datetime), 
+        fetch=True
+    )
+
+Join with agents to get per-agent balance sheets:
+
+    query = """
+        SELECT 
+            a.agent_id,
+            o1.Residence_Families_FamilyID as household_id,
+            bs.netWorth,
+            bs.liquidSavings
+        FROM world_sim_simulations.initialized_agents a
+        JOIN world_sim_agents.l2_other_part_1 o1 
+          ON o1.LALVOTERID = a.agent_id
+        JOIN world_sim_simulations.household_balance_sheet_samples bs
+          ON bs.household_id = o1.Residence_Families_FamilyID
+          AND bs.simulation_id = a.simulation_id
+        WHERE a.simulation_id = %s
+    """
+
+
+EXAMPLE: Agent Decision Making
+-------------------------------
+
+You can use balance sheet data in agent behavior:
+
+    # In your agent initialization or decision logic:
+    
+    def get_agent_liquidity(agent_id, simulation_id):
+        """Get agent's liquid savings from household balance sheet."""
+        query = """
+            SELECT bs.liquidSavings
+            FROM world_sim_simulations.initialized_agents ia
+            JOIN world_sim_agents.l2_other_part_1 o1 
+              ON o1.LALVOTERID = ia.agent_id
+            JOIN world_sim_simulations.household_balance_sheet_samples bs
+              ON bs.household_id = COALESCE(
+                  o1.Residence_Families_FamilyID, 
+                  o1.Mailing_Families_FamilyID,
+                  CONCAT('SYNTH_', ia.agent_id)
+              )
+            WHERE ia.agent_id = %s 
+              AND ia.simulation_id = %s
+        """
+        result = sim_mgr.execute_query(query, (agent_id, simulation_id), fetch=True)
+        return result.data[0]['liquidSavings'] if result.success and result.data else 0.0
+    
+    # Use in agent behavior:
+    liquidity = get_agent_liquidity(agent_id, sim_id)
+    if liquidity > 10000:
+        # Agent can afford large purchase
+        pass
+
+
+TESTING YOUR INTEGRATION
+-------------------------
+
+Run the provided test script:
+
+    cd /Users/tristanbrigham/Desktop/Classes/Thesis/World_Sim
+    python3 Examples/test_household_balance_sheet_generation.py
+
+Expected output:
+  ✓ Creates simulation with 5 agents
+  ✓ Generates 2-5 household balance sheets (agents may share households)
+  ✓ Displays balance sheet details
+  ✓ Verifies idempotency
+  ✓ Shows summary statistics
+
+If test passes, your integration is working correctly!
+
+
+COMMON QUESTIONS
+----------------
+
+Q: Do I need to change my existing simulation code?
+A: No! If you're using register_simulation() with agent_ids, it's automatic.
+
+Q: What if I don't have HPI data loaded?
+A: System gracefully defaults to growth factor = 1.0 and continues.
+
+Q: What if an agent has no family ID?
+A: System creates a synthetic single-member household: SYNTH_{agent_id}
+
+Q: Can I generate balance sheets for existing simulations?
+A: Yes! Call ensure_initial_household_balance_sheet_for_agent() manually.
+
+Q: Does this slow down simulation initialization?
+A: Minimal impact: ~0.1-0.5 seconds per household on typical hardware.
+
+Q: Can I customize the sampling distributions?
+A: Yes, edit agent_balance_sheet_generation.py sampling functions.
+
+Q: Are balance sheets updated during simulation?
+A: Not yet. Current implementation: one snapshot at simulation start.
+
+
+TROUBLESHOOTING
+---------------
+
+Issue: "No agents found in L2 data"
+Fix: Check database connection and L2 table population
+
+Issue: "Failed to insert balance sheet: duplicate key"
+Fix: This is expected if already exists (idempotent). Check logs.
+
+Issue: "Missing HPI index for quarters"
+Fix: Load HPI data using Utils/gov_data/hpi_pull_and_insert.py
+
+Issue: Balance sheets not appearing
+Fix: 1. Check simulation has initialized_agents
+     2. Check simulation_start_datetime is set
+     3. Run test script to verify system health
+
+
+PERFORMANCE NOTES
+-----------------
+
+For large simulations (1000+ agents):
+  - Balance sheet generation is per-household, not per-agent
+  - Typical household size: 2-3 agents
+  - 1000 agents → ~400 households → ~400 balance sheets
+  - Estimated time: 40-200 seconds (0.1-0.5s per household)
+  - Happens once at simulation start, not per tick
+
+Optimization ideas (not implemented):
+  - Batch insert balance sheets (currently one-by-one)
+  - Parallel processing for large simulations
+  - Cache L2 feature extraction
+
+
+EXTENDING THE SYSTEM
+--------------------
+
+To add new balance sheet components:
+
+1. Add column to household_balance_sheet_samples table (schema file)
+2. Add sampling function in agent_balance_sheet_generation.py
+3. Add to _sample_household_balance_sheet() return dict
+4. Add to _insert_balance_sheet() query and params
+5. Update totals calculation if asset or liability
+
+To add new data sources:
+
+1. Create new manager in Database/managers/ (if needed)
+2. Import manager in agent_balance_sheet_generation.py
+3. Add feature extraction in _extract_agent_features()
+4. Use in sampling functions
+
+
+WHERE TO FIND MORE INFO
+-----------------------
+
+Full documentation: Simulation/data_generation/BALANCE_SHEET_README.txt
+Module source: Simulation/data_generation/agent_balance_sheet_generation.py
+Test script: Examples/test_household_balance_sheet_generation.py
+Database schema: Setup/Database/schemas/04_simulations.sql (household_balance_sheet_samples)
+
+
+================================================================================
+INTEGRATION COMPLETE - READY TO USE!
+================================================================================
+
