@@ -1068,7 +1068,6 @@ def _normalize_income_ranking(ranking: Any) -> float:
         return 0.5
     try:
         rank_int = int(str(ranking).strip())
-        # assuming ranking is 1-10 or 1-100 scale
         if rank_int <= 10:
             return (rank_int - 1) / 9.0
         else:

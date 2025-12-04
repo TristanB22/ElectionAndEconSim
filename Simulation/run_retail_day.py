@@ -43,7 +43,7 @@ def run_retail_day_test():
 
     # The UnifiedSimulationRunner requires an api_manager, but it's not used
     # for config-based runs, so we can pass a mock or None.
-    api_manager = APIManager() # Assuming it can be instantiated without params
+    api_manager = APIManager()
 
     # Create the runner and run from config
     runner = UnifiedSimulationRunner(api_manager=api_manager)

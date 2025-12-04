@@ -261,7 +261,6 @@ class PlanExecutor:
 						except Exception:
 							pass
 
-			# Budgets already deducted via dry_run estimate above; skip double-deduction
 
 				# Discovery: Add to agent's knowledge base
 				if action_name == "Exchange" and firm_id:
@@ -527,14 +526,6 @@ class PlanExecutor:
 		  - The buyer type (e.g., "household" or "firm")
 		  - The use type (e.g., "final" or "intermediate")
 
-		Why is this important?
-		----------------------
-		Correctly classifying transactions allows the simulation to:
-		  - Distinguish between end-user (household) purchases and business-to-business transactions.
-		  - Properly attribute economic activity to the correct GDP components (e.g., final consumption
-		    vs. intermediate consumption).
-		  - Enable downstream analytics, reporting, and auditing of economic flows.
-
 		Args:
 			transaction_data: Dictionary containing transaction details, including type and participants.
 
@@ -581,12 +572,6 @@ class PlanExecutor:
 		firm's financial processor has all necessary data to track transactions, generate statements,
 		and participate in the simulated economy.
 
-		Why is this important?
-		----------------------
-		- Ensures that each firm starts with a well-defined financial baseline.
-		- Enables accurate tracking of cash flows, inventory changes, and cost of goods sold.
-		- Supports downstream financial reporting and auditing.
-
 		Args:
 			firm_id: The unique identifier for the firm to initialize.
 			initial_cash: The starting cash balance for the firm.
@@ -627,12 +612,6 @@ class PlanExecutor:
 		which may include the balance sheet, income statement, and other relevant financial data.
 		This is useful for reporting, auditing, and analysis within the simulation.
 
-		Why is this important?
-		----------------------
-		- Provides transparency into the financial health and performance of simulated firms.
-		- Enables agents, analysts, or other systems to make decisions based on firm financials.
-		- Supports economic research and scenario analysis.
-
 		Args:
 			firm_id: The unique identifier for the firm whose statements are requested.
 
@@ -663,12 +642,6 @@ class PlanExecutor:
 		transactions and events, and computes GDP using the expenditure approach (and potentially others).
 		The result provides a quantitative measure of the simulated economy's output, which is useful for
 		evaluating macroeconomic performance, comparing scenarios, and supporting research or policy analysis.
-
-		Why do we do this?
-		------------------
-		- To provide a macro-level indicator of economic activity within the simulation.
-		- To enable analysis of how agent actions, firm behavior, and policy changes affect overall output.
-		- To support reporting, visualization, and benchmarking of simulation runs.
 
 		Args:
 			start_time: The datetime marking the beginning of the simulation period to analyze.

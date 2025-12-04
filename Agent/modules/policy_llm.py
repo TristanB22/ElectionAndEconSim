@@ -77,13 +77,12 @@ class PolicyLLM:
         try:
             response_text, *_ = self.api_manager.make_request(prompt, intelligence_level=2, max_tokens=500, temperature=0.5)
             action_json = json.loads(response_text)
-            # Assuming a schema for single actions exists, e.g., "action_single"
             # if self._validate_json(action_json, "action_single"):
             #     return action_json
             # else:
             #     logger.warning("LLM returned invalid action JSON.")
             #     return None
-            return action_json # Placeholder, assuming action_plan schema can validate a single step
+            return action_json
         except Exception as e:
             logger.error(f"Error in decide_action: {e}", exc_info=True)
             return None

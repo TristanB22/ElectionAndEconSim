@@ -125,7 +125,6 @@ class PlanManager:
                 exchange_counterparty = step.parameters.get("counterparty")
                 receive = step.parameters.get("receive", {})
                 if receive:
-                    # Get first item (assuming single item exchanges for now)
                     for sku, qty in receive.items():
                         exchange_sku = sku
                         exchange_quantity = qty

@@ -191,10 +191,6 @@ def _iter_journal_lines_for_firm(
             if not isinstance(entry, dict):
                 continue
                 
-            # Extract date from the entry (assuming it's stored at the transaction level)
-            # For now, we'll include all entries since firm_id filtering is done at a higher level
-            # and the sample data doesn't include firm_id at the line level
-            
             # Add the entry to results if it has the required fields
             if "account" in entry and ("debit" in entry or "credit" in entry):
                 # Add a default date if not present (use current timestamp)
