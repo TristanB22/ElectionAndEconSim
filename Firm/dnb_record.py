@@ -177,7 +177,7 @@ class DNBRecord:
             
             firm.finances.snapshot_opening()
         
-        # Optionally initialize org chart if DNB data suggests it
+
         if self.dnb_data.get("BUSINESSDESCRIPTION", "").lower().find("grocery") != -1:
             firm.org_chart.init_basic_grocery_org(principal_name=self.dnb_data.get("PRINCIPAL", "Owner"))
 
