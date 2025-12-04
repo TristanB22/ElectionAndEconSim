@@ -2364,7 +2364,7 @@ class Agent:
         
         # Get constraints (cash, time, attention)
         constraints = {
-            "cash": 100.0, # Example
+            "cash": 100.0, 
             "time_minutes_remaining": getattr(self, 'time_budget_minutes', 60 * 16),
             "attention_units_remaining": getattr(self, 'attention_budget_minutes', 60 * 8)
         }
