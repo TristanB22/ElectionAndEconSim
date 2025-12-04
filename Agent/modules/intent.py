@@ -287,18 +287,17 @@ class IntentManager:
         """Get a default intent configuration for a Yale student."""
         # Create default values
         values = [
-            Value("growth", 0.70, 0.08),           # Increased from 0.65 - balanced emphasis on improvement
-            Value("reliability", 0.65, 0.06),      # Increased from 0.60 - balanced emphasis on obligations
-            Value("health", 0.70, 0.10),           # Keep increased emphasis on wellbeing
-            Value("community", 0.45, 0.08),        # Increased from 0.40 - balanced emphasis on others
-            Value("integrity", 0.60, 0.04),        # Increased from 0.55 - balanced emphasis on moral obligations
-            Value("curiosity", 0.65, 0.10),        # Increased from 0.60 - balanced emphasis on learning
-            # Balanced values for self-interested, moderately efficiency-focused behavior
-            Value("efficiency", 0.65, 0.10),       # Moderate value on doing things well (reduced from 0.80)
-            Value("leisure", 0.70, 0.12),          # Good value on free time (reduced from 0.75)
-            Value("self_interest", 0.65, 0.08),    # Moderate value on personal benefit (reduced from 0.70)
-            Value("comfort", 0.60, 0.10),          # Moderate value on avoiding discomfort (reduced from 0.65)
-            Value("autonomy", 0.65, 0.08)          # Good value on independence (reduced from 0.70)
+            Value("growth", 0.70, 0.08),
+            Value("reliability", 0.65, 0.06),
+            Value("health", 0.70, 0.10),
+            Value("community", 0.45, 0.08),
+            Value("integrity", 0.60, 0.04),
+            Value("curiosity", 0.65, 0.10),
+            Value("efficiency", 0.65, 0.10),
+            Value("leisure", 0.70, 0.12),
+            Value("self_interest", 0.65, 0.08),
+            Value("comfort", 0.60, 0.10),
+            Value("autonomy", 0.65, 0.08)
         ]
         
         for value in values:
@@ -314,7 +313,7 @@ class IntentManager:
                 horizon=GoalHorizon.IMMEDIATE,
                 description="Complete elasticity problems 1–3 thoroughly and efficiently",
                 why="Master academic content (growth) while using time wisely (efficiency) to maintain work-life balance (leisure)",
-                priority=0.75,  # Increased from 0.70 - more important
+                priority=0.75,
                 confidence=0.8,
                 due=now.replace(hour=22, minute=0, second=0, microsecond=0),
                 review_after="PT90M",
@@ -326,7 +325,7 @@ class IntentManager:
                 horizon=GoalHorizon.IMMEDIATE,
                 description="Communicate clearly with RA supervisor about dataset requirements",
                 why="Maintain professional relationships (reliability) while being efficient (efficiency) with time",
-                priority=0.70,  # Increased from 0.65 - more important
+                priority=0.70,
                 confidence=0.9,
                 due=now.replace(hour=20, minute=0, second=0, microsecond=0),
                 review_after="PT60M",
@@ -338,7 +337,7 @@ class IntentManager:
                 horizon=GoalHorizon.IMMEDIATE,
                 description="Plan today's schedule to balance quality work with free time",
                 why="Complete tasks well (growth) while maintaining personal time (leisure) through smart planning (efficiency)",
-                priority=0.70,  # Reduced from 0.75 - less urgent
+                priority=0.70,
                 confidence=0.8,
                 due=now.replace(hour=18, minute=0, second=0, microsecond=0),
                 review_after="PT120M",
@@ -357,7 +356,7 @@ class IntentManager:
                 horizon=GoalHorizon.SHORT,
                 description="Deliver high-quality dataset update by Monday deadline",
                 why="Meet professional standards (reliability) while working efficiently (efficiency) to maintain work-life balance (leisure)",
-                priority=0.80,  # Increased from 0.75 - more important
+                priority=0.80,
                 confidence=0.75,
                 due=now + timedelta(days=4),
                 review_after="P1D",
@@ -369,7 +368,7 @@ class IntentManager:
                 horizon=GoalHorizon.SHORT,
                 description="Establish sustainable balance between academic work and personal time",
                 why="Maintain academic performance (growth) while preserving personal wellbeing (leisure) through smart time management (efficiency)",
-                priority=0.75,  # Reduced from 0.80 - less urgent
+                priority=0.75,
                 confidence=0.7,
                 due=now + timedelta(days=14),
                 review_after="P7D",
@@ -388,7 +387,7 @@ class IntentManager:
                 horizon=GoalHorizon.MEDIUM,
                 description="Secure summer internship that offers good learning and career opportunities",
                 why="Advance career prospects (growth) while maintaining work-life balance (leisure) and personal benefit (self_interest)",
-                priority=0.65,  # Increased from 0.60 - more important
+                priority=0.65,
                 confidence=0.6,
                 due=now + timedelta(days=150),
                 review_after="P30D",
@@ -400,7 +399,7 @@ class IntentManager:
                 horizon=GoalHorizon.MEDIUM,
                 description="Develop personal systems for better productivity and time management",
                 why="Improve academic performance (growth) while creating more free time (leisure) through better organization (efficiency)",
-                priority=0.65,  # Reduced from 0.70 - less urgent
+                priority=0.65,
                 confidence=0.7,
                 due=now + timedelta(days=120),
                 review_after="P30D",
@@ -419,7 +418,7 @@ class IntentManager:
                 horizon=GoalHorizon.LONG,
                 description="Build a fulfilling career that provides financial security and work-life balance over next 10–15 years",
                 why="Achieve professional success (growth) while maintaining personal happiness (leisure) and avoiding burnout (comfort)",
-                priority=0.60,  # Increased from 0.55 - more important
+                priority=0.60,
                 confidence=0.6,
                 due=now + timedelta(days=3650),
                 review_after="P365D",
@@ -430,7 +429,7 @@ class IntentManager:
                 horizon=GoalHorizon.LONG,
                 description="Create life systems that support both achievement and personal wellbeing",
                 why="Build sustainable success (growth) while maintaining personal fulfillment (leisure) through effective living (efficiency)",
-                priority=0.65,  # Increased from 0.60 - more important
+                priority=0.65,
                 confidence=0.7,
                 due=now + timedelta(days=3650),
                 review_after="P365D",

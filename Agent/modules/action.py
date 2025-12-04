@@ -57,23 +57,23 @@ class Action:
     """
     
     # Formal intensity thresholds for memory management - loaded from configuration
-    MEMORY_RETRIEVAL_THRESHOLD = 3  # Default, will be updated in __init__
-    MEMORY_CREATION_THRESHOLD = 4   # Default, will be updated in __init__
+    MEMORY_RETRIEVAL_THRESHOLD = 3
+    MEMORY_CREATION_THRESHOLD = 4
     
     # LLM configuration parameters - loaded from configuration
-    PERCEPTION_INTELLIGENCE_LEVEL = 3  # Use highest intelligence for perception
-    MEMORY_CREATION_INTELLIGENCE_LEVEL = 3  # Use highest intelligence for memory creation
-    TEST_CONNECTION_INTELLIGENCE_LEVEL = 3  # Use highest intelligence for testing
+    PERCEPTION_INTELLIGENCE_LEVEL = 3
+    MEMORY_CREATION_INTELLIGENCE_LEVEL = 3
+    TEST_CONNECTION_INTELLIGENCE_LEVEL = 3
     
-    PERCEPTION_MAX_TOKENS = 300  # Default, will be updated in __init__
-    MEMORY_CREATION_MAX_TOKENS = 500  # Default, will be updated in __init__
-    TEST_CONNECTION_MAX_TOKENS = 10  # Default, will be updated in __init__
+    PERCEPTION_MAX_TOKENS = 300
+    MEMORY_CREATION_MAX_TOKENS = 500
+    TEST_CONNECTION_MAX_TOKENS = 10
     
-    PERCEPTION_TEMPERATURE = 0.3  # Default, will be updated in __init__
-    MEMORY_CREATION_TEMPERATURE = 0.4  # Default, will be updated in __init__
+    PERCEPTION_TEMPERATURE = 0.3
+    MEMORY_CREATION_TEMPERATURE = 0.4
     
     # Memory similarity search parameter
-    MEMORY_SIMILARITY_SEARCH_K = 3  # Default, will be updated in __init__
+    MEMORY_SIMILARITY_SEARCH_K = 3
     
     def __init__(self, api_key: Optional[str] = None):
         """
