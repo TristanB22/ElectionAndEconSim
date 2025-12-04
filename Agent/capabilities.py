@@ -39,8 +39,6 @@ def get_capability_context(agent, world) -> Dict[str, List[Capability]]:
     # include known roles/capabilities of people/places
     known_roles = kb.list_by_kind("role", min_confidence=0.7)
     for role_entity in known_roles:
-        # Example: if "dr_smith is a doctor" is known, add a "DoctorVisit" capability
-        # This is a simplified representation; actual implementation might be more complex
         caps.setdefault("Interact", []).append(Capability("Interact", role_entity.entity_id, {"role": role_entity.entity_id}))
     
     return caps
