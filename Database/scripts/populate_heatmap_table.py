@@ -153,7 +153,7 @@ def main():
 
     args = parser.parse_args()
     if args.count <= 0:
-        print("❌ Count must be positive")
+        print("Count must be positive")
         sys.exit(1)
 
     clear_table = not args.no_clear
