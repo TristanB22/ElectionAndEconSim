@@ -1,13 +1,6 @@
--- World Sim Geo Database Schema (MySQL Version)
--- Optimized for spatial queries and real-time updates
--- Simplified version without complex triggers and procedures
+-- world sim geo database schema
 
--- Drop and create the database
-DROP DATABASE IF EXISTS world_sim_geo;
-CREATE DATABASE world_sim_geo CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE world_sim_geo;
-
--- Main POIs table with spatial indexing and duplicate prevention
+-- master heatmap table for subset of 10,000 POIs
 CREATE TABLE IF NOT EXISTS pois (
     id INT AUTO_INCREMENT PRIMARY KEY,
     osm_id BIGINT NOT NULL,

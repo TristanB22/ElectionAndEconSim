@@ -1,3 +1,5 @@
+-- world sim geo simulations database schema
+
 -- tables to hold inforamtion for each of the simulations
 -- about the geography of the simulation
 

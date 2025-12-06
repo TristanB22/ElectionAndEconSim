@@ -1,4 +1,4 @@
-
+-- world sim bls database schema
 DROP DATABASE IF EXISTS world_sim_bls;
 CREATE DATABASE world_sim_bls CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 

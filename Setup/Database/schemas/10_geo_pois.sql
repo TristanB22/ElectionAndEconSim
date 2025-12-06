@@ -1,4 +1,4 @@
--- geo pois tables for geo info
+-- world sim geo database schema
 
 -- drop and create the database
 DROP DATABASE IF EXISTS world_sim_geo;
