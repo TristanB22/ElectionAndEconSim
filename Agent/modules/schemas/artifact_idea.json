@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "artifact_type": {"type": "string"},
+    "concept": {"type": "string"},
+    "target_users": {"type": "string"},
+    "affordances": {"type": "array"}
+  },
+  "required": ["artifact_type", "concept", "target_users", "affordances"]
+}
+
+
+
