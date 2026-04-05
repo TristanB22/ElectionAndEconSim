@@ -1,0 +1,91 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: world_sim_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: world_sim_dev
+      MYSQL_USER: world_sim
+      MYSQL_PASSWORD: world_sim_dev
+    ports:
+      - "1001:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Removed old schema mounting to prevent duplication
+      # - ./Database/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+      # - ./Database/init_data.sql:/docker-entrypoint-initdb.d/02-init_data.sql:ro
+    command: >
+      --default-authentication-plugin=mysql_native_password
+      --character-set-server=utf8mb4
+      --collation-server=utf8mb4_unicode_ci
+      --max_connections=200
+      --innodb_buffer_pool_size=512M
+    networks:
+      - world_sim_network
+
+  # phpMyAdmin for database management (optional)
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: world_sim_phpmyadmin
+    restart: unless-stopped
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: world_sim_dev
+      MYSQL_ROOT_PASSWORD: world_sim_dev
+    ports:
+      - "1005:80"
+    depends_on:
+      - mysql
+    networks:
+      - world_sim_network
+
+  # Qdrant Vector Database (for agent memories)
+  qdrant:
+    image: qdrant/qdrant:latest
+    container_name: world_sim_qdrant
+    restart: unless-stopped
+    ports:
+      - "1002:6333"
+      - "1003:6334"
+    volumes:
+      - qdrant_data:/qdrant/storage
+    environment:
+      QDRANT__SERVICE__HTTP_PORT: 6333
+      QDRANT__SERVICE__GRPC_PORT: 6334
+    networks:
+      - world_sim_network
+
+  # Grafana for monitoring (optional)
+  grafana:
+    image: grafana/grafana:latest
+    container_name: world_sim_grafana
+    restart: unless-stopped
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+    ports:
+      - "1006:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./Docker/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      - mysql
+    networks:
+      - world_sim_network
+
+volumes:
+  mysql_data:
+    driver: local
+  qdrant_data:
+    driver: local
+  grafana_data:
+    driver: local
+
+networks:
+  world_sim_network:
+    driver: bridge
